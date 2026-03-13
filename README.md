@@ -3,11 +3,18 @@
 TaskFlow es una aplicación web de gestión de tareas simple.  
 
 ## Características
-    * añadir
-    * editar
-    * buscar
-    *filtrar tareas
-Así como marcar tareas como completadas o borrarlas. Además incluye un modo oscuro que se puede activar y guardar la preferencia del usuario.
+    - añadir tareas
+    - editar tareas
+    - buscar tareas
+    - filtrar tareas
+    - borrar tareas
+    - marcar como completado tareas
+Además incluye un modo oscuro que se puede activar y guardar la preferencia del usuario.
+
+## Tecnologías
+    - **HTML5**, **JavaScript (Vanilla)**  
+    - **Tailwind CSS** para estilos y modo oscuro  
+    - **LocalStorage** para persistencia de tareas 
 
 Testing
 
