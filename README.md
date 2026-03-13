@@ -1,3 +1,6 @@
 TaskFlow es una app de móvil y PC on la cual puede: Crear, modificar, eliminar y filtrar tareas
 Interfaz sencilla, con el titulo en grande y llamativo, just abajo tenemos la primera opción que es la de añadir una tarea a la lista la cual es la siguiente, En esta se ve las tareas que tienes pendientes y puede marcarlas con un tick para que marquen como completada o dejar en blanco porque no has acabado todavia. En el ultimo apartado sale estadísticas dividido en 3 partes, Tareas hechas, Tareas pendientes y el total de tareas.
+
+Testing
+
 la caja de escritura funciona perfectamente, yo pongo la tarea y sale, luego el boton de añadir lo envia al apartado de lista de tareas y puedo añadir cuantas quiera, luego automaticamente detecta cuantas listas hay, Si estan hechas o no en el apartado de estadísticas y justo arriba de la lista de tareas hay 2 botones para filtrar que tareas hay y el boton de eliminar tareas que esten completas y el boton de completar tareas que hace lo que indica su nombre. 
