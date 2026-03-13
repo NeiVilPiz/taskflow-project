@@ -77,33 +77,18 @@ placeholder="Buscar tarea..."
 class="border rounded-lg px-3 py-2 dark:bg-gray-800 dark:border-gray-600"
 />
 
-<div class="flex gap-2">
-
-<button data-filter="all" class="border px-3 py-1 rounded">
-Todas
-</button>
-
-<button data-filter="pending" class="border px-3 py-1 rounded">
-Pendientes
-</button>
-
-<button data-filter="completed" class="border px-3 py-1 rounded">
-Completadas
-</button>
+<div class="flex gap-2 justify-center">
+  <button data-filter="all" class="border px-3 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Todas</button>
+  <button data-filter="pending" class="border px-3 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Pendientes</button>
+  <button data-filter="completed" class="border px-3 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Completadas</button>
+</div>
 
 </div>
 
 
-<div class="flex gap-2">
-
-<button id="completeAll" class="border px-3 py-1 rounded">
-Completar todas
-</button>
-
-<button id="clearCompleted" class="border px-3 py-1 rounded">
-Borrar completadas
-</button>
-
+<div class="flex gap-2 justify-center">
+  <button id="completeAll" class="border px-3 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Completar todas</button>
+  <button id="clearCompleted" class="border px-3 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Borrar completadas</button>
 </div>
 
 </section>
