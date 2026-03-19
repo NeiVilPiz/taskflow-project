@@ -1,0 +1,1 @@
+ChatGPT hace explicaciones más user friendly, para que sea entendible para ambos nuevos en los tecnicismos y los ya experimentados pero si quieres indagar más en los tecnicismos se lo preguntas.
