@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="TaskFlow - Gestor sencillo de tareas con estadísticas y modo oscuro.">
-
+  <meta name="description" content="TaskFlow - gestor de tareas con estadísticas y modo oscuro.">
   <title>TaskFlow</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -14,136 +12,107 @@
     }
   </script>
 </head>
-
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
-
-
-<header class="relative py-6">
-
-<h1 class="text-3xl font-bold text-center">TaskFlow</h1>
-
-<button
-  id="themeToggle"
-  class="absolute top-4 right-4 border px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"
-  type="button"
-  aria-label="Cambiar entre modo claro y oscuro"
->
-  Dark Mode
-</button>
-
-</header>
-
-
-<main class="max-w-xl mx-auto flex flex-col gap-6 px-4">
-
-
-<section>
-
-<form id="taskForm" class="flex flex-col gap-2">
-
-<label for="taskInput" class="font-medium">
-¿Qué tarea deseas añadir?
-</label>
-
-<div class="flex gap-2">
-
-<input
-id="taskInput"
-type="text"
-placeholder="Añadir tarea..."
-required
-class="flex-1 border rounded-lg px-3 py-2 dark:bg-gray-800 dark:border-gray-600"
-/>
-
-
-<button
-type="submit"
-class="border rounded-lg px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-Añadir
-</button>
-
-</div>
-
-</form>
-
-</section>
-
-
-<!-- CONTROLES -->
-<section class="flex flex-col gap-3">
-
-<input
-id="searchInput"
-type="text"
-placeholder="Buscar tarea..."
-class="border rounded-lg px-3 py-2 dark:bg-gray-800 dark:border-gray-600"
-/>
-
-<div class="flex gap-2 justify-center" role="group" aria-label="Filtros de tareas">
-  <button type="button" data-filter="all" class="border px-3 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Todas</button>
-  <button type="button" data-filter="pending" class="border px-3 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Pendientes</button>
-  <button type="button" data-filter="completed" class="border px-3 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Completadas</button>
-</div>
-
-<div class="flex gap-2 justify-center" role="group" aria-label="Acciones sobre las tareas">
-  <button id="completeAll" type="button" class="border px-3 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Completar todas</button>
-  <button id="clearCompleted" type="button" class="border px-3 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Borrar completadas</button>
-</div>
-
-</section>
-
-
-
-<!-- LISTA -->
-<section class="border rounded-xl p-5 shadow dark:bg-gray-800 dark:border-gray-700">
-
-<h2 class="text-xl font-semibold mb-3">
-Lista de tareas
-</h2>
-
-<ul id="taskList" class="flex flex-col gap-2"></ul>
-
-</section>
-
-
-</main>
-
-
-
-<!-- ESTADISTICAS -->
-<aside class="max-w-xl mx-auto mt-6 p-5 border rounded-xl shadow dark:bg-gray-800 dark:border-gray-700">
-
-<h2 class="text-xl font-semibold mb-4">
-Estadísticas
-</h2>
-
-<div class="flex gap-3">
-
-<div class="flex-1 text-center border rounded-lg p-3">
-<p>Tareas por hacer</p>
-<p id="todo" class="text-2xl font-bold">0</p>
-</div>
-
-<div class="flex-1 text-center border rounded-lg p-3">
-<p>Tareas hechas</p>
-<p id="done" class="text-2xl font-bold">0</p>
-</div>
-
-<div class="flex-1 text-center border rounded-lg p-3">
-<p>Total</p>
-<p id="total" class="text-2xl font-bold">0</p>
-</div>
-
-</div>
-
-</aside>
-
-
-<script src="app.js"></script>
-
-<footer class="mt-10 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
-  <p>TaskFlow - gestor de tareas</p>
-</footer>
-
+  <header class="relative py-6">
+    <h1 class="text-3xl font-bold text-center">TaskFlow</h1>
+    <button
+      id="themeToggle"
+      type="button"
+      aria-label="Cambiar entre modo claro y oscuro"
+      class="absolute top-4 right-4 border px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"
+    >
+      Modo oscuro
+    </button>
+  </header>
+  <main class="max-w-xl mx-auto flex flex-col gap-6 px-4">
+    <!-- FORMULARIO -->
+    <section>
+      <form id="taskForm" class="flex flex-col gap-2">
+        <label for="taskInput" class="font-medium">
+          ¿Qué tarea deseas añadir?
+        </label>
+        <div class="flex gap-2">
+          <input
+            id="taskInput"
+            type="text"
+            placeholder="Añadir tarea..."
+            required
+            class="flex-1 border rounded-lg px-3 py-2 dark:bg-gray-800 dark:border-gray-600"
+          />
+          <button
+            type="submit"
+            class="border rounded-lg px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            Añadir
+          </button>
+        </div>
+      </form>
+      <!-- Mensaje de error -->
+      <p id="taskError" class="mt-1 text-sm text-red-500 h-4"></p>
+    </section>
+    <!-- CONTROLES -->
+    <section class="flex flex-col gap-3">
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="Buscar tarea..."
+        class="border rounded-lg px-3 py-2 dark:bg-gray-800 dark:border-gray-600"
+      />
+      <div class="flex gap-2 justify-center" role="group" aria-label="Filtros de tareas">
+        <button type="button" data-filter="all" class="border px-3 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+          Todas
+        </button>
+        <button type="button" data-filter="pending" class="border px-3 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+          Pendientes
+        </button>
+        <button type="button" data-filter="completed" class="border px-3 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+          Completadas
+        </button>
+      </div>
+      <div class="flex gap-2 justify-center">
+        <button id="completeAll" type="button" class="border px-3 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+          Completar todas
+        </button>
+        <button id="clearCompleted" type="button" class="border px-3 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+          Borrar completadas
+        </button>
+      </div>
+    </section>
+    <!-- LISTA -->
+    <section class="border rounded-xl p-5 shadow dark:bg-gray-800 dark:border-gray-700">
+      <h2 class="text-xl font-semibold mb-3" id="taskListTitle">
+        Lista de tareas
+      </h2>
+      <ul
+        id="taskList"
+        aria-labelledby="taskListTitle"
+        class="flex flex-col gap-2"
+      ></ul>
+    </section>
+  </main>
+  <!-- ESTADÍSTICAS -->
+  <aside class="max-w-xl mx-auto mt-6 p-5 border rounded-xl shadow dark:bg-gray-800 dark:border-gray-700">
+    <h2 class="text-xl font-semibold mb-4">
+      Estadísticas
+    </h2>
+    <div class="flex gap-3">
+      <div class="flex-1 text-center border rounded-lg p-3">
+        <p>Tareas por hacer</p>
+        <p id="todo" class="text-2xl font-bold">0</p>
+      </div>
+      <div class="flex-1 text-center border rounded-lg p-3">
+        <p>Tareas hechas</p>
+        <p id="done" class="text-2xl font-bold">0</p>
+      </div>
+      <div class="flex-1 text-center border rounded-lg p-3">
+        <p>Total</p>
+        <p id="total" class="text-2xl font-bold">0</p>
+      </div>
+    </div>
+  </aside>
+  <script src="app.js"></script>
+  <footer class="mt-10 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+    <p>TaskFlow - gestor de tareas</p>
+  </footer>
 </body>
 </html>
