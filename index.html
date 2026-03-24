@@ -1,88 +1,72 @@
 <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TaskFlow Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
 
-// NUEVO: ordenación
-function sortTasks(list) {
-  const type = sort.value;
+<h1 class="text-2xl font-bold mb-4">TaskFlow Pro</h1>
 
-  if (type === "priority") {
-    const order = { high: 3, medium: 2, low: 1 };
-    return list.sort((a,b) => order[b.priority] - order[a.priority]);
-  }
+<form id="taskForm" class="flex gap-2 mb-4">
+  <input id="taskInput" placeholder="Nueva tarea" class="border p-2 flex-1" required />
 
-  if (type === "date") {
-    return list.sort((a,b) => new Date(a.dueDate||0) - new Date(b.dueDate||0));
-  }
+  <!-- Nuevo: prioridad -->
+  <select id="priority">
+    <option value="low">Baja</option>
+    <option value="medium">Media</option>
+    <option value="high">Alta</option>
+  </select>
 
-  return list.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+<!-- Nuevo: ordenado por prioridad o por fecha -->
+<div class="mb-4">
+  <select id="sort">
+    <option value="created">Ordenar por creación</option>
+    <option value="priority">Ordenar por prioridad</option>
+    <option value="date">Ordenar por fecha</option>
+  </select>
+</div>
+
+<ul id="taskList" class="space-y-2"></ul>
+
+<script>
+let tasks = [];
+
+function save() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-function render() {
-  taskList.innerHTML = "";
-
-  let list = [...tasks];
-  list = sortTasks(list);
-
-  list.forEach(task => {
-    const li = document.createElement("li");
-    li.className = "p-2 border flex justify-between";
-
-    const left = document.createElement("div");
-
-    // título
-    const title = document.createElement("span");
-    title.textContent = task.title;
-
-    if (task.completed) title.style.textDecoration = "line-through";
-
-    // prioridad color
-    if (task.priority === "high") title.classList.add("text-red-500");
-    if (task.priority === "medium") title.classList.add("text-yellow-500");
-
-    // fecha
-    const date = document.createElement("div");
-    date.textContent = task.dueDate || "Sin fecha";
-    date.className = "text-xs";
-
-    left.appendChild(title);
-    left.appendChild(date);
-
-    const right = document.createElement("div");
-
-    const btnToggle = document.createElement("button");
-    btnToggle.textContent = "✔";
-    btnToggle.onclick = () => toggle(task.id);
-
-    const btnDelete = document.createElement("button");
-    btnDelete.textContent = "✕";
-    btnDelete.onclick = () => remove(task.id);
-
-    right.appendChild(btnToggle);
-    right.appendChild(btnDelete);
-
-    li.appendChild(left);
-    li.appendChild(right);
-
-    taskList.appendChild(li);
-  });
-
-  save();
+function load() {
+  tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
 }
 
-// init
-load();
-render();
+function createTask(title, priority, dueDate) {
+  return {
+    id: crypto.randomUUID(),
+    title,
+    completed: false,
+    priority,
+    dueDate,
+    createdAt: new Date()
+  };
+}
 
-// events
-const taskForm = document.getElementById("taskForm");
-const taskInput = document.getElementById("taskInput");
-const priority = document.getElementById("priority");
-const dueDate = document.getElementById("dueDate");
-const sort = document.getElementById("sort");
-const taskList = document.getElementById("taskList");
+function addTask(e) {
+  e.preventDefault();
 
-taskForm.addEventListener("submit", addTask);
-sort.addEventListener("change", render);
-</script>
+  const title = taskInput.value.trim();
+  if (title.length < 3) return;
 
-</body>
-</html>
+  tasks.push(createTask(title, priority.value, dueDate.value));
+
+  taskInput.value = "";
+  render();
+}
+
+function toggle(id) {
+  const t = tasks.find(t => t.id === id);
+  t.completed = !t.completed;
+  render();
+}
