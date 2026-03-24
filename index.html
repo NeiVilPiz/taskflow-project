@@ -76,3 +76,138 @@ function toggle(id) {
   t.completed = !t.completed;
   render();
 }
+
+function remove(id) {
+  tasks = tasks.filter(t => t.id !== id);
+  render();
+}
+
+function isOverdue(task) {
+  if (!task.dueDate) return false;
+  return !task.completed && new Date(task.dueDate) < new Date();
+}
+
+function sortTasks(list) {
+  const type = sort.value;
+
+  if (type === "priority") {
+    const order = { high: 3, medium: 2, low: 1 };
+    return list.sort((a,b) => order[b.priority] - order[a.priority]);
+  }
+
+  if (type === "date") {
+    return list.sort((a,b) => new Date(a.dueDate||0) - new Date(b.dueDate||0));
+  }
+
+  return list.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+}
+function render() {
+  taskList.innerHTML = "";
+
+  let list = [...tasks];
+  list = sortTasks(list);
+
+  list.forEach(task => {
+    const li = document.createElement("li");
+    li.className = "p-2 border flex justify-between";
+
+    const left = document.createElement("div");
+
+    const title = document.createElement("span");
+    title.textContent = task.title;
+
+    if (task.completed) title.style.textDecoration = "line-through";
+
+    if (task.priority === "high") title.classList.add("text-red-500");
+    if (task.priority === "medium") title.classList.add("text-yellow-500");
+
+    if (isOverdue(task)) {
+      title.classList.add("font-bold");
+      title.textContent += " ⚠️";
+    }
+
+    const date = document.createElement("div");
+    date.textContent = task.dueDate || "Sin fecha";
+    date.className = "text-xs";
+
+    left.appendChild(title);
+    left.appendChild(date);
+
+    const right = document.createElement("div");
+
+    const btnToggle = document.createElement("button");
+    btnToggle.textContent = "✔";
+    btnToggle.onclick = () => toggle(task.id);
+
+    const btnDelete = document.createElement("button");
+    btnDelete.textContent = "✕";
+    btnDelete.onclick = () => remove(task.id);
+
+    right.appendChild(btnToggle);
+    right.appendChild(btnDelete);
+
+    li.appendChild(left);
+    li.appendChild(right);
+
+    taskList.appendChild(li);
+  });
+
+  save();
+}
+// Nueva Función: exportar tareas a JSON
+function exportTasks() {
+  const blob = new Blob([JSON.stringify(tasks, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "tasks.json";
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+// Nueva Función: importar tareas desde JSON
+function importTasks(file) {
+  const reader = new FileReader();
+
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (Array.isArray(data)) {
+        tasks = data;
+        render();
+      }
+    } catch {
+      alert("Archivo inválido");
+    }
+  };
+
+  reader.readAsText(file);
+}
+// init
+load();
+render();
+
+// events
+const taskForm = document.getElementById("taskForm");
+const taskInput = document.getElementById("taskInput");
+const priority = document.getElementById("priority");
+const dueDate = document.getElementById("dueDate");
+const sort = document.getElementById("sort");
+const taskList = document.getElementById("taskList");
+const exportBtn = document.getElementById("exportBtn");
+const importInput = document.getElementById("importInput");
+
+taskForm.addEventListener("submit", addTask);
+sort.addEventListener("change", render);
+exportBtn.addEventListener("click", exportTasks);
+
+importInput.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (file) importTasks(file);
+});
+</script>
+
+</body>
+</html>
