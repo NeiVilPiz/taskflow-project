@@ -1,31 +1,77 @@
 # TaskFlow
- [Prueba aquí](https://taskflow-project-three-pi.vercel.app)
 
- TaskFlow es una aplicación web de gestión de tareas simple.  
+> Una app de gestión de tareas pensada para la productividad diaria.
 
-## Características
-- añadir tareas
-- editar tareas
-- buscar tareas
-- filtrar tareas
-- borrar tareas
-- marcar como completado tareas
+🔗 **Prueba Aquí**  
+👉 https://taskflow-project-three-pi.vercel.app  
 
+---
 
-Además incluye un modo oscuro que se puede activar y guardar la preferencia del usuario.
+##  Funciones
 
-## Tecnologías
-- **HTML5**, **JavaScript**
-- **Tailwind CSS** para los estilos y el modo oscuro  
-- **LocalStorage** para la persistencia de tareas
-- **Git, Github** para el control de versiones
+Todo lo que necesitas, sin complicaciones:
 
-## Diseño
-![](https://github.com/NeiVilPiz/taskflow-project/blob/main/Wireframe.png)
+- ➕ Añadir tareas en segundos  
+- ✏️ Edición inline (doble click)  
+- 🔍 Búsqueda en tiempo real  
+- 🎯 Filtros inteligentes (todas / pendientes / completadas)  
+- ✅ Marcar tareas como completadas  
+- 🗑️ Eliminar tareas fácilmente  
+- 📊 Estadísticas automáticas  
+- 🌙 Modo oscuro persistente  
 
-## Testing
+---
 
-la caja de escritura funciona perfectamente, yo pongo la tarea y sale, luego el boton de añadir lo envia al apartado de lista de tareas y puedo añadir cuantas quiera, luego automaticamente detecta cuantas listas hay, Si estan hechas o no en el apartado de estadísticas y justo arriba de la lista de tareas hay 2 botones para filtrar que tareas hay y el boton de eliminar tareas que esten completas y el boton de completar tareas que hace lo que indica su nombre. 
+## ¿Por qué TaskFlow?
 
-## Diseño final
-![](https://github.com/NeiVilPiz/taskflow-project/blob/main/DiseñoFinal.png)
+Porque las apps de tareas suelen ser:
+
+❌ Demasiado complejas  
+❌ Demasiado pesadas  
+❌ Llenas de cosas que no usas  
+
+👉 **TaskFlow va directo al grano.**
+
+---
+
+## 🛠️ Tech Stack
+
+- **HTML5**
+- **JavaScript (Vanilla)**
+- **Tailwind CSS**
+- **LocalStorage**
+- **Git & GitHub**
+
+---
+
+## 🎨 Preview
+
+### 🧩 Wireframe
+![Wireframe](https://github.com/NeiVilPiz/taskflow-project/blob/main/Wireframe.png)
+
+### 🎯 Final UI
+![Final](https://github.com/NeiVilPiz/taskflow-project/blob/main/DiseñoFinal.png)
+
+---
+
+## 🧪 Testing
+
+✔️ Añadir tareas funciona correctamente  
+✔️ Render dinámico sin recargar  
+✔️ Estadísticas en tiempo real  
+✔️ Filtros funcionando  
+✔️ Eliminación de tareas completadas  
+✔️ Búsqueda instantánea  
+
+---
+
+## 🧑‍💻 Autor
+Neithan
+
+Desarrollado como proyecto de práctica frontend.
+
+---
+
+## 📄 License
+
+Uso libre para aprendizaje y desarrollo personal.
