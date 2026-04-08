@@ -44,6 +44,13 @@ Porque las apps de tareas suelen ser:
 
 ---
 
+ ## 📝 Ejemplos de uso TaskFlow
+ 
+ - Administración de tiempo de proyectos
+ - Establecimiento de metas
+
+---
+
 ## 🎨 Preview
 
 ### 🧩 Wireframe
