@@ -9,7 +9,6 @@
 
 <h1 class="text-2xl font-bold mb-4">TaskFlow Pro</h1>
 
-<!-- FORM -->
 <form id="taskForm" class="flex gap-2 mb-4">
   <input id="taskInput" placeholder="Nueva tarea" class="border p-2 flex-1" required />
 
@@ -24,38 +23,32 @@
   <button class="bg-blue-500 text-white px-3">+</button>
 </form>
 
-<!-- SEARCH -->
 <input id="searchInput" placeholder="Buscar..." class="border p-2 mb-2 w-full">
 
-<!-- FILTERS -->
 <div class="flex gap-2 mb-2">
-  <button onclick="setFilter('all')">Todas</button>
-  <button onclick="setFilter('pending')">Pendientes</button>
-  <button onclick="setFilter('completed')">Completadas</button>
+  <button onclick="setFilter('all')" class="border px-2">Todas</button>
+  <button onclick="setFilter('pending')" class="border px-2">Pendientes</button>
+  <button onclick="setFilter('completed')" class="border px-2">Completadas</button>
 </div>
 
-<!-- ACTIONS -->
+<!-- BOTONES ARREGLADOS -->
 <div class="flex gap-2 mb-2">
-  <button onclick="completeAll()">Completar todas</button>
-  <button onclick="clearCompleted()">Borrar completadas</button>
+  <button id="completeAllBtn" class="border px-2 py-1">
+    Completar todas
+  </button>
+  <button id="clearCompletedBtn" class="border px-2 py-1">
+    Borrar completadas
+  </button>
 </div>
 
-<!-- SORT -->
 <select id="sort" class="mb-4">
   <option value="created">Ordenar por creación</option>
   <option value="priority">Ordenar por prioridad</option>
   <option value="date">Ordenar por fecha</option>
 </select>
 
-<!-- EXPORT / IMPORT -->
-<div class="mb-4">
-  <button id="exportBtn">Exportar</button>
-  <input type="file" id="importInput">
-</div>
-
 <ul id="taskList" class="space-y-2"></ul>
 
-<!-- STATS -->
 <div class="mt-4 flex gap-4">
   <div>Pendientes: <span id="todo">0</span></div>
   <div>Completadas: <span id="done">0</span></div>
@@ -66,6 +59,17 @@
 let tasks = [];
 let activeFilter = "all";
 let searchQuery = "";
+
+// ELEMENTOS
+const taskForm = document.getElementById("taskForm");
+const taskInput = document.getElementById("taskInput");
+const priority = document.getElementById("priority");
+const dueDate = document.getElementById("dueDate");
+const sort = document.getElementById("sort");
+const taskList = document.getElementById("taskList");
+const searchInput = document.getElementById("searchInput");
+const completeAllBtn = document.getElementById("completeAllBtn");
+const clearCompletedBtn = document.getElementById("clearCompletedBtn");
 
 // STORAGE
 function save() {
@@ -158,7 +162,7 @@ function sortTasks(list) {
   return list.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
 }
 
-// STATS
+// STATS + MEJORA PRO
 function updateStats() {
   const total = tasks.length;
   const done = tasks.filter(t => t.completed).length;
@@ -166,6 +170,10 @@ function updateStats() {
   document.getElementById("total").textContent = total;
   document.getElementById("done").textContent = done;
   document.getElementById("todo").textContent = total - done;
+
+  // MEJORA PRO
+  completeAllBtn.disabled = total === 0;
+  clearCompletedBtn.disabled = done === 0;
 }
 
 // RENDER
@@ -174,18 +182,15 @@ function render() {
 
   let list = [...tasks];
 
-  // FILTER
   if (activeFilter === "pending") list = list.filter(t => !t.completed);
   if (activeFilter === "completed") list = list.filter(t => t.completed);
 
-  // SEARCH
   if (searchQuery) {
     list = list.filter(t =>
       t.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }
 
-  // SORT
   list = sortTasks(list);
 
   list.forEach(task => {
@@ -236,38 +241,6 @@ function render() {
   save();
 }
 
-// EXPORT
-function exportTasks() {
-  const blob = new Blob([JSON.stringify(tasks, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "tasks.json";
-  a.click();
-
-  URL.revokeObjectURL(url);
-}
-
-// IMPORT
-function importTasks(file) {
-  const reader = new FileReader();
-
-  reader.onload = function(e) {
-    try {
-      const data = JSON.parse(e.target.result);
-      if (Array.isArray(data)) {
-        tasks = data;
-        render();
-      }
-    } catch {
-      alert("Archivo inválido");
-    }
-  };
-
-  reader.readAsText(file);
-}
-
 // INIT
 load();
 render();
@@ -275,12 +248,8 @@ render();
 // EVENTS
 taskForm.addEventListener("submit", addTask);
 sort.addEventListener("change", render);
-exportBtn.addEventListener("click", exportTasks);
-
-importInput.addEventListener("change", (e) => {
-  const file = e.target.files[0];
-  if (file) importTasks(file);
-});
+completeAllBtn.addEventListener("click", completeAll);
+clearCompletedBtn.addEventListener("click", clearCompleted);
 </script>
 
 </body>
