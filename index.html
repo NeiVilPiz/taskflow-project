@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TaskFlow Pro</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -10,36 +9,65 @@
 
 <h1 class="text-2xl font-bold mb-4">TaskFlow Pro</h1>
 
+<!-- FORM -->
 <form id="taskForm" class="flex gap-2 mb-4">
   <input id="taskInput" placeholder="Nueva tarea" class="border p-2 flex-1" required />
 
-  <!-- Nuevo: prioridad -->
   <select id="priority">
     <option value="low">Baja</option>
     <option value="medium">Media</option>
     <option value="high">Alta</option>
   </select>
 
-  <!-- Nuevo: fecha límite -->
   <input type="date" id="dueDate" />
 
   <button class="bg-blue-500 text-white px-3">+</button>
 </form>
 
-<!-- Nuevo: ordenado por prioridad o por fecha -->
+<!-- SEARCH -->
+<input id="searchInput" placeholder="Buscar..." class="border p-2 mb-2 w-full">
+
+<!-- FILTERS -->
+<div class="flex gap-2 mb-2">
+  <button onclick="setFilter('all')">Todas</button>
+  <button onclick="setFilter('pending')">Pendientes</button>
+  <button onclick="setFilter('completed')">Completadas</button>
+</div>
+
+<!-- ACTIONS -->
+<div class="flex gap-2 mb-2">
+  <button onclick="completeAll()">Completar todas</button>
+  <button onclick="clearCompleted()">Borrar completadas</button>
+</div>
+
+<!-- SORT -->
+<select id="sort" class="mb-4">
+  <option value="created">Ordenar por creación</option>
+  <option value="priority">Ordenar por prioridad</option>
+  <option value="date">Ordenar por fecha</option>
+</select>
+
+<!-- EXPORT / IMPORT -->
 <div class="mb-4">
-  <select id="sort">
-    <option value="created">Ordenar por creación</option>
-    <option value="priority">Ordenar por prioridad</option>
-    <option value="date">Ordenar por fecha</option>
-  </select>
+  <button id="exportBtn">Exportar</button>
+  <input type="file" id="importInput">
 </div>
 
 <ul id="taskList" class="space-y-2"></ul>
 
+<!-- STATS -->
+<div class="mt-4 flex gap-4">
+  <div>Pendientes: <span id="todo">0</span></div>
+  <div>Completadas: <span id="done">0</span></div>
+  <div>Total: <span id="total">0</span></div>
+</div>
+
 <script>
 let tasks = [];
+let activeFilter = "all";
+let searchQuery = "";
 
+// STORAGE
 function save() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
@@ -48,6 +76,7 @@ function load() {
   tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
 }
 
+// CREATE
 function createTask(title, priority, dueDate) {
   return {
     id: crypto.randomUUID(),
@@ -59,34 +88,61 @@ function createTask(title, priority, dueDate) {
   };
 }
 
+// ADD
 function addTask(e) {
   e.preventDefault();
-
   const title = taskInput.value.trim();
   if (title.length < 3) return;
 
   tasks.push(createTask(title, priority.value, dueDate.value));
-
   taskInput.value = "";
   render();
 }
 
+// TOGGLE
 function toggle(id) {
   const t = tasks.find(t => t.id === id);
-  t.completed = !t.completed;
+  if (t) t.completed = !t.completed;
   render();
 }
 
+// DELETE
 function remove(id) {
   tasks = tasks.filter(t => t.id !== id);
   render();
 }
 
+// FILTER
+function setFilter(filter) {
+  activeFilter = filter;
+  render();
+}
+
+// COMPLETE ALL
+function completeAll() {
+  tasks.forEach(t => t.completed = true);
+  render();
+}
+
+// CLEAR COMPLETED
+function clearCompleted() {
+  tasks = tasks.filter(t => !t.completed);
+  render();
+}
+
+// SEARCH
+searchInput.addEventListener("input", () => {
+  searchQuery = searchInput.value;
+  render();
+});
+
+// OVERDUE
 function isOverdue(task) {
   if (!task.dueDate) return false;
   return !task.completed && new Date(task.dueDate) < new Date();
 }
 
+// SORT
 function sortTasks(list) {
   const type = sort.value;
 
@@ -101,10 +157,35 @@ function sortTasks(list) {
 
   return list.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
 }
+
+// STATS
+function updateStats() {
+  const total = tasks.length;
+  const done = tasks.filter(t => t.completed).length;
+
+  document.getElementById("total").textContent = total;
+  document.getElementById("done").textContent = done;
+  document.getElementById("todo").textContent = total - done;
+}
+
+// RENDER
 function render() {
   taskList.innerHTML = "";
 
   let list = [...tasks];
+
+  // FILTER
+  if (activeFilter === "pending") list = list.filter(t => !t.completed);
+  if (activeFilter === "completed") list = list.filter(t => t.completed);
+
+  // SEARCH
+  if (searchQuery) {
+    list = list.filter(t =>
+      t.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }
+
+  // SORT
   list = sortTasks(list);
 
   list.forEach(task => {
@@ -117,7 +198,6 @@ function render() {
     title.textContent = task.title;
 
     if (task.completed) title.style.textDecoration = "line-through";
-
     if (task.priority === "high") title.classList.add("text-red-500");
     if (task.priority === "medium") title.classList.add("text-yellow-500");
 
@@ -152,9 +232,11 @@ function render() {
     taskList.appendChild(li);
   });
 
+  updateStats();
   save();
 }
-// Nueva Función: exportar tareas a JSON
+
+// EXPORT
 function exportTasks() {
   const blob = new Blob([JSON.stringify(tasks, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
@@ -167,7 +249,7 @@ function exportTasks() {
   URL.revokeObjectURL(url);
 }
 
-// Nueva Función: importar tareas desde JSON
+// IMPORT
 function importTasks(file) {
   const reader = new FileReader();
 
@@ -185,20 +267,12 @@ function importTasks(file) {
 
   reader.readAsText(file);
 }
-// init
+
+// INIT
 load();
 render();
 
-// events
-const taskForm = document.getElementById("taskForm");
-const taskInput = document.getElementById("taskInput");
-const priority = document.getElementById("priority");
-const dueDate = document.getElementById("dueDate");
-const sort = document.getElementById("sort");
-const taskList = document.getElementById("taskList");
-const exportBtn = document.getElementById("exportBtn");
-const importInput = document.getElementById("importInput");
-
+// EVENTS
 taskForm.addEventListener("submit", addTask);
 sort.addEventListener("change", render);
 exportBtn.addEventListener("click", exportTasks);
