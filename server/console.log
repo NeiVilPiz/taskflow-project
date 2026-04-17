@@ -1,0 +1,1 @@
+console.log("PORT desde .env:", process.env.PORT);
