@@ -7,40 +7,35 @@ function getTasks(req, res) {
 }
 
 // Crear tarea
-function createTask(req, res) {
+function createTask(req, res, next) {
   const { title } = req.body;
 
-  // Validación defensiva
   if (!title || typeof title !== "string" || title.trim().length < 3) {
     return res.status(400).json({
       error: "Título inválido"
     });
   }
 
-  const newTask = taskService.crearTarea({
-    title: title.trim()
-  });
+  try {
+    const newTask = taskService.crearTarea({
+      title: title.trim()
+    });
 
-  res.status(201).json(newTask);
+    res.status(201).json(newTask);
+  } catch (error) {
+    next(error);
+  }
 }
 
 // Eliminar tarea
-function deleteTask(req, res) {
+function deleteTask(req, res, next) {
   const { id } = req.params;
 
   try {
     taskService.eliminarTarea(id);
     res.status(204).send();
   } catch (error) {
-    if (error.message === "NOT_FOUND") {
-      return res.status(404).json({
-        error: "Tarea no encontrada"
-      });
-    }
-
-    res.status(500).json({
-      error: "Error interno"
-    });
+    next(error);
   }
 }
 

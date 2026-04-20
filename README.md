@@ -1,6 +1,9 @@
-# TaskFlow
+# 🚀 TaskFlow - Arquitectura Full Stack
 
-> Una app de gestión de tareas pensada para la productividad diaria.
+TaskFlow es una aplicación de gestión de tareas basada en arquitectura cliente-servidor.
+
+---
+
 
 🔗 **Prueba Aquí**  
 👉 https://taskflow-project-three-pi.vercel.app  
@@ -21,6 +24,27 @@ Todo lo que necesitas, sin complicaciones:
 - 🌙 Modo oscuro persistente  
 
 ---
+
+## Arquitectura
+
+### Frontend
+- Vanilla JS
+- Fetch API (capa de red en `src/api/client.js`)
+- UI reactiva basada en estados:
+  - loading
+  - error
+  - success
+
+### Backend
+- Node.js + Express
+- Arquitectura en capas:
+  - routes
+  - controllers
+  - services
+  - config
+
+---
+
 
 ## ¿Por qué TaskFlow?
 
@@ -57,7 +81,7 @@ Porque las apps de tareas suelen ser:
 ![Wireframe](https://github.com/NeiVilPiz/taskflow-project/blob/main/Wireframe.png)
 
 ### 🎯 Final UI
-![Final](https://github.com/NeiVilPiz/taskflow-project/blob/main/DiseñoFinal.png)
+![DiseñoFinal](https://github.com/NeiVilPiz/taskflow-project/blob/main/DiseñoFinal.png)
 
 ---
 
@@ -75,7 +99,7 @@ Porque las apps de tareas suelen ser:
 ## 🧑‍💻 Autor
 Neithan
 
-Desarrollado como proyecto de práctica frontend.
+Desarrollado como proyecto de prácticas.
 
 ---
 
